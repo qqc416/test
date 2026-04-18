@@ -101,3 +101,20 @@ phf15 = peak_n / (4 * max15)
 
 print(f"PHF5 = {phf5:.4f}")
 print(f"PHF15 = {phf15:.4f}")
+
+# 任务5：驾驶员文件导出 
+print("\n任务5：线路驾驶员文件 ")
+out_dir = '线路驾驶员信息'#创建文件
+os.makedirs(out_dir, exist_ok=True)
+
+routes = df[(df['线路号']>=1101)&(df['线路号']<=1120)]['线路号'].unique)#筛选路线1101-1120
+#遍历所有路线，生成txt文件
+for r in sorted(routes):
+    sub = df[df['线路号']==r]#提取当前路线数据
+    pairs = sub[['车辆编号','驾驶员编号']].drop_duplicates()
+    with open(f'{out_dir}/{r}.txt','w',encoding='utf-8') as f:#写入文件
+        f.write(f'线路号: {r}\n车辆编号\t驾驶员编号\n')
+        for _,row in pairs.iterrows():
+            f.write(f"{row['车辆编号']}\t{row['驾驶员编号']}\n")
+    print(f'已生成：{r}.txt')
+
