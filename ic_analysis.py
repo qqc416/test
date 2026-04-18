@@ -79,4 +79,25 @@ plt.tight_layout()
 plt.savefig('route_stops.png', dpi=150)
 plt.close()
 
+# 任务4：高峰小时系数 
+print("\n任务4：高峰小时系数 ")
+hourly = df_up.groupby('hour').size()#按小时统计上车辆
+peak_h = hourly.idxmax()#高峰小时
+peak_n = hourly.max()#高峰小时刷卡量
+print(f"高峰小时：{peak_h}:00-{peak_h+1}:00，共{peak_n}次")
 
+peak_df = df_up[df_up['hour'] == peak_h].copy()#筛选数据
+peak_df['min'] = peak_df['交易时间'].dt.minute#提取分钟数，用于分窗统计
+
+# 5min
+peak_df['bin5'] = peak_df['min'] // 5
+max5 = peak_df['bin5'].value_counts().max()
+phf5 = peak_n / (12 * max5)
+
+# 15min
+peak_df['bin15'] = peak_df['min'] // 15
+max15 = peak_df['bin15'].value_counts().max()
+phf15 = peak_n / (4 * max15)
+
+print(f"PHF5 = {phf5:.4f}")
+print(f"PHF15 = {phf15:.4f}")
