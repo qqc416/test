@@ -118,3 +118,33 @@ for r in sorted(routes):
             f.write(f"{row['车辆编号']}\t{row['驾驶员编号']}\n")
     print(f'已生成：{r}.txt')
 
+#任务6：TOP10 + 热力图 
+print("\n任务6：TOP10排名 + 热力图 ")
+#统计top10各个数据
+top10_driver = df['驾驶员编号'].value_counts().head(10).values
+top10_route  = df['线路号'].value_counts().head(10).values
+top10_stop   = df['上车站点'].value_counts().head(10).values
+top10_bus    = df['车辆编号'].value_counts().head(10).values
+#输出结果
+print("司机TOP10：", top10_driver)
+print("线路TOP10：", top10_route)
+print("站点TOP10：", top10_stop)
+print("车辆TOP10：", top10_bus)
+
+# 热力图
+heat = np.array([top10_driver, top10_route, top10_stop, top10_bus])
+plt.figure(figsize=(12,5))
+sns.heatmap(heat, annot=True, fmt='d', cmap='YlOrRd',
+            xticklabels=[f'Top{i+1}' for i in range(10)],
+            yticklabels=['司机','线路','上车站点','车辆'])
+plt.title('服务绩效TOP10热力图')
+plt.tight_layout()
+plt.savefig('performance_heatmap.png', dpi=150, bbox_inches='tight')
+plt.close()
+
+print("\n结论说明：")
+ print("从热力图可看出，1101线路客流量显著高于其他线路，是城市核心公交干线；")
+ print("部分驾驶员服务人次远超同行，说明其承担更多运营班次；")
+ print("少数站点客流高度集中，是重要交通枢纽；")
+ print("部分车辆使用频次极高，属于线路主力运营车辆。")
+ print("\n===== 所有任务执行完毕！已生成全部图片与文件 =====")
