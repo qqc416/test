@@ -57,5 +57,26 @@ plt.xticks(range(0,24,2))
 plt.grid(alpha=0.3)
 plt.savefig('hour_distribution.png', dpi=150)
 plt.close()
+# 任务3：线路站点分析 
+print("\n 任务3：线路站点分析")
+#定义函数，计算标准差
+def analyze_route_stops(df, route_col='线路号', stops_col='ride_stops'):
+    res = df.groupby(route_col)[stops_col].agg(['mean','std']).reset_index()#分组计算均值，标准差
+    res.columns = ['线路号','mean_stops','std_stops']#对各列进行命名
+    return res.sort_values('mean_stops', ascending=False)##降序排序
+
+route_df = analyze_route_stops(df)
+print(route_df.head(10))
+
+# 水平条形图
+top15 = route_df.head(15)
+plt.figure(figsize=(10,6))
+plt.barh(top15['线路号'].astype(str), top15['mean_stops'], color='#5599cc')
+plt.title('Top15线路平均搭乘站点数')
+plt.xlabel('平均站点数')
+plt.ylabel('线路号')
+plt.tight_layout()
+plt.savefig('route_stops.png', dpi=150)
+plt.close()
 
 
