@@ -107,7 +107,7 @@ print("\n任务5：线路驾驶员文件 ")
 out_dir = '线路驾驶员信息'#创建文件
 os.makedirs(out_dir, exist_ok=True)
 
-routes = df[(df['线路号']>=1101)&(df['线路号']<=1120)]['线路号'].unique)#筛选路线1101-1120
+routes = df[(df['线路号']>=1101)&(df['线路号']<=1120)]['线路号'].unique()#筛选路线1101-1120
 #遍历所有路线，生成txt文件
 for r in sorted(routes):
     sub = df[df['线路号']==r]#提取当前路线数据
